@@ -12,9 +12,9 @@ namespace Harmony.Viewmodels
         public DateTime CreatedAt { get; set; } 
         public string ProfilePictureUrl { get; set; } = string.Empty;
         public string Biography { get; set; } = string.Empty;
-        public bool IsSynthetic { get; set; } = false;
-        public bool IsConnectedToSpotify { get; set; } = false;
-        public DateTime MusicTasteLastRefreshed { get; set; } = DateTime.MinValue;
+        public bool IsSynthetic { get; set; }
+        public bool IsConnectedToSpotify { get; set; }
+        public DateTime MusicTasteLastRefreshed { get; set; }
         public List<SongViewModel> FavoriteSongs { get; set; } = new List<SongViewModel>();
         public List<ArtistViewModel> FavoriteArtists { get; set; } = new List<ArtistViewModel>();
         public List<GenreViewModel> FavoriteGenres { get; set; } = new List<GenreViewModel>();

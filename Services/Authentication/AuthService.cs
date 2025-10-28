@@ -1,7 +1,9 @@
-﻿using Blazored.LocalStorage;
+﻿using AutoMapper;
+using Blazored.LocalStorage;
 using Harmony.Providers;
 using Harmony.Services.Base;
 using Harmony.Services.Interfaces;
+using Harmony.Viewmodels;
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace Harmony.Services.Authentication
@@ -11,26 +13,36 @@ namespace Harmony.Services.Authentication
         private readonly IClient httpClient;
         private readonly ILocalStorageService localStorage;
         private readonly AuthenticationStateProvider authenticationStateProvider;
+        private readonly IMapper mapper;
 
-        public AuthService(IClient httpClient, ILocalStorageService localStorage, AuthenticationStateProvider authenticationStateProvider)
+        public AuthService(IClient httpClient, ILocalStorageService localStorage, AuthenticationStateProvider authenticationStateProvider, IMapper mapper)
         {
             this.httpClient = httpClient;
             this.localStorage = localStorage;
             this.authenticationStateProvider = authenticationStateProvider;
+            this.mapper = mapper;
         }
 
-        public async Task<bool> AuthenticateAsync(UserLoginRequest loginRequest)
+        public async Task<bool> AuthenticateAsync(LoginViewModel loginViewModel)
         {
-            // Call the login endpoint
-            var response = await httpClient.LoginAsync(loginRequest);
+            try
+            {
+                // Call the login endpoint
+                var loginRequest = mapper.Map<UserLoginRequest>(loginViewModel);
+                var response = await httpClient.LoginAsync(loginRequest);
 
-            // Store the token received from API in local storage
-            await localStorage.SetItemAsync("accessToken", response.Data.Token);
+                // Store the token received from API in local storage
+                await localStorage.SetItemAsync("accessToken", response.Data.Token);
 
-            // Change auth state of application, using the ApiAuthenticationStateProvider
-            await ((ApiAuthenticationStateProvider)authenticationStateProvider).LoggedIn();
+                // Change auth state of application, using the ApiAuthenticationStateProvider
+                await ((ApiAuthenticationStateProvider)authenticationStateProvider).LoggedIn();
 
-            return true;
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public async Task Logout()
@@ -38,10 +50,11 @@ namespace Harmony.Services.Authentication
             await ((ApiAuthenticationStateProvider)authenticationStateProvider).LoggedOut();
         }
 
-        public async Task<ReturnResponse> Register(UserRegisterRequest registerRequest)
+        public async Task<ReturnResponse> Register(RegisterViewModel registerViewModel)
         {
             try
             {
+                var registerRequest = mapper.Map<UserRegisterRequest>(registerViewModel);
                 var response = await httpClient.RegisterAsync(registerRequest);
                 if (response.Errors != null && response.Errors.Count > 0)
                 {
