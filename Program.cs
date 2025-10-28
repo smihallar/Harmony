@@ -1,5 +1,13 @@
+using Blazored.LocalStorage;
+using Harmony.Providers;
+using Harmony.Services;
+using Harmony.Services.Authentication;
+using Harmony.Services.Base;
+using Harmony.Services.Interfaces;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Harmony
 {
@@ -11,7 +19,18 @@ namespace Harmony
             builder.RootComponents.Add<App>("#app");
             builder.RootComponents.Add<HeadOutlet>("head::after");
 
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            builder.Services.AddAutoMapper(cfg => { }, typeof(Program));
+
+            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7165") });
+
+            builder.Services.AddBlazoredLocalStorage();
+
+            builder.Services.AddScoped<ApiAuthenticationStateProvider>();
+            builder.Services.AddScoped<AuthenticationStateProvider>(provider => provider.GetRequiredService<ApiAuthenticationStateProvider>());
+            builder.Services.AddAuthorizationCore();
+            builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IClient, Client>();
+            builder.Services.AddScoped<IUserService, UserService>();
 
             await builder.Build().RunAsync();
         }
