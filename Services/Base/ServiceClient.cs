@@ -22,6 +22,7 @@
 
 namespace Harmony.Services.Base
 {
+    using static Harmony.Services.Base.Client;
     using System = global::System;
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.6.1.0 (NJsonSchema v11.5.1.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -83,21 +84,21 @@ namespace Harmony.Services.Base
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<SpotifyTokenResponseReturnResponse> LoginSpotifyAsync();
+        System.Threading.Tasks.Task<SpotifyAuthorizationUrlResponseReturnResponse> LoginSpotifyAsync();
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<SpotifyTokenResponseReturnResponse> LoginSpotifyAsync(System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<SpotifyAuthorizationUrlResponseReturnResponse> LoginSpotifyAsync(System.Threading.CancellationToken cancellationToken);
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<UserProfileResponseReturnResponse> CallbackAsync(string code, string state);
+        System.Threading.Tasks.Task<ReturnResponse> CallbackAsync(string code, string state);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<UserProfileResponseReturnResponse> CallbackAsync(string code, string state, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<ReturnResponse> CallbackAsync(string code, string state, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -137,12 +138,12 @@ namespace Harmony.Services.Base
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ReturnResponse> UpdateBioAsync(string userId, UpdateUserBioRequest body);
+        System.Threading.Tasks.Task<UserProfileResponseReturnResponse> UpdateBioAsync(string userId, UpdateUserBioRequest body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ReturnResponse> UpdateBioAsync(string userId, UpdateUserBioRequest body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<UserProfileResponseReturnResponse> UpdateBioAsync(string userId, UpdateUserBioRequest body, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -682,7 +683,7 @@ namespace Harmony.Services.Base
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<SpotifyTokenResponseReturnResponse> LoginSpotifyAsync()
+        public virtual System.Threading.Tasks.Task<SpotifyAuthorizationUrlResponseReturnResponse> LoginSpotifyAsync()
         {
             return LoginSpotifyAsync(System.Threading.CancellationToken.None);
         }
@@ -690,7 +691,7 @@ namespace Harmony.Services.Base
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<SpotifyTokenResponseReturnResponse> LoginSpotifyAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<SpotifyAuthorizationUrlResponseReturnResponse> LoginSpotifyAsync(System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -731,7 +732,7 @@ namespace Harmony.Services.Base
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<SpotifyTokenResponseReturnResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<SpotifyAuthorizationUrlResponseReturnResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -760,7 +761,7 @@ namespace Harmony.Services.Base
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<UserProfileResponseReturnResponse> CallbackAsync(string code, string state)
+        public virtual System.Threading.Tasks.Task<ReturnResponse> CallbackAsync(string code, string state)
         {
             return CallbackAsync(code, state, System.Threading.CancellationToken.None);
         }
@@ -768,7 +769,7 @@ namespace Harmony.Services.Base
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<UserProfileResponseReturnResponse> CallbackAsync(string code, string state, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ReturnResponse> CallbackAsync(string code, string state, System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -819,7 +820,7 @@ namespace Harmony.Services.Base
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<UserProfileResponseReturnResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<ReturnResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -844,6 +845,37 @@ namespace Harmony.Services.Base
                 if (disposeClient_)
                     client_.Dispose();
             }
+        }
+
+        /// <returns>OK</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.1.0 (NJsonSchema v11.5.1.0 (Newtonsoft.Json v13.0.0.0))")]
+        public partial class SpotifyAuthorizationUrlResponseReturnResponse
+        {
+
+            [Newtonsoft.Json.JsonProperty("message", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+            public string Message { get; set; }
+
+            [Newtonsoft.Json.JsonProperty("errors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+            public System.Collections.Generic.ICollection<string> Errors { get; set; }
+
+            [Newtonsoft.Json.JsonProperty("statusCode", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+            public HttpStatusCode StatusCode { get; set; }
+
+            [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+            public SpotifyAuthorizationUrlResponse Data { get; set; }
+
+        }
+
+        /// <returns>OK</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.1.0 (NJsonSchema v11.5.1.0 (Newtonsoft.Json v13.0.0.0))")]
+        public partial class SpotifyAuthorizationUrlResponse
+        {
+
+            [Newtonsoft.Json.JsonProperty("authorizationUrl", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+            public string AuthorizationUrl { get; set; }
+
         }
 
         /// <returns>OK</returns>
@@ -1172,7 +1204,7 @@ namespace Harmony.Services.Base
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ReturnResponse> UpdateBioAsync(string userId, UpdateUserBioRequest body)
+        public virtual System.Threading.Tasks.Task<UserProfileResponseReturnResponse> UpdateBioAsync(string userId, UpdateUserBioRequest body)
         {
             return UpdateBioAsync(userId, body, System.Threading.CancellationToken.None);
         }
@@ -1180,7 +1212,7 @@ namespace Harmony.Services.Base
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ReturnResponse> UpdateBioAsync(string userId, UpdateUserBioRequest body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<UserProfileResponseReturnResponse> UpdateBioAsync(string userId, UpdateUserBioRequest body, System.Threading.CancellationToken cancellationToken)
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
@@ -1229,7 +1261,7 @@ namespace Harmony.Services.Base
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<ReturnResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<UserProfileResponseReturnResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -1769,45 +1801,6 @@ namespace Harmony.Services.Base
 
         [Newtonsoft.Json.JsonProperty("artists", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<Artist> Artists { get; set; }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.1.0 (NJsonSchema v11.5.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class SpotifyTokenResponse
-    {
-
-        [Newtonsoft.Json.JsonProperty("access_token", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Access_token { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("token_type", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Token_type { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("expires_in", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int Expires_in { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("refresh_token", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Refresh_token { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("scope", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Scope { get; set; }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.1.0 (NJsonSchema v11.5.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class SpotifyTokenResponseReturnResponse
-    {
-
-        [Newtonsoft.Json.JsonProperty("message", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Message { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("errors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<string> Errors { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("statusCode", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public HttpStatusCode StatusCode { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public SpotifyTokenResponse Data { get; set; }
 
     }
 

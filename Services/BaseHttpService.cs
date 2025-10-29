@@ -1,5 +1,6 @@
 ﻿using Blazored.LocalStorage;
 using Harmony.Services.Authentication;
+using Harmony.Services.Base;
 using Harmony.Services.Interfaces;
 using System.Net.Http.Headers;
 
@@ -7,11 +8,11 @@ namespace Harmony.Services
 {
     public class BaseHttpService
     {
-        private readonly HttpClient client;
+        private readonly IClient client;
         protected readonly IAuthService authService;
         protected readonly ILocalStorageService localStorage;
 
-        public BaseHttpService(HttpClient client, IAuthService authService, ILocalStorageService localStorage)
+        public BaseHttpService(IClient client, IAuthService authService, ILocalStorageService localStorage)
         {
             this.client = client;
             this.authService = authService;
@@ -23,7 +24,7 @@ namespace Harmony.Services
             var token = await localStorage.GetItemAsync<string>("accessToken");
             if (!string.IsNullOrWhiteSpace(token))
             {
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                client.HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             }
         }
     }
