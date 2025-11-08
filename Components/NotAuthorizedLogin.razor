@@ -1,0 +1,10 @@
+﻿@inject NavigationManager NavigationManager
+
+<div>
+    <p>You must be logged in to access this page.</p>
+    <button class="btn btn-primary" @onclick='() => NavigationManager.NavigateTo("/login")'>Log In</button>
+</div>
+
+@code {
+
+}

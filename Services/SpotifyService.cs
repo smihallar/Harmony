@@ -19,12 +19,12 @@ namespace Harmony.Services
             this.mapper = mapper;
         }
 
-        public async Task<ReturnResponse<string>> GetSpotifyLoginUrl()
+        public async Task<ReturnResponse<string>> GetSpotifyLoginUrl(string userId)
         {
             try
             {
                 //await GetBearerToken();
-                var response = await client.LoginSpotifyAsync();
+                var response = await client.LoginSpotifyAsync(userId);
                 if (response.Errors != null && response.Errors.Any())
                 {
                     return new ReturnResponse<string>

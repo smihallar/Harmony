@@ -79,7 +79,7 @@ namespace Harmony.Services
         {
             try
             {
-                if (newBio == null || newBio.Length > 500)
+                if (string.IsNullOrEmpty(newBio)|| newBio.Length > 500)
                 {
                     return new ReturnResponse<UserProfileViewModel>
                     {
@@ -94,6 +94,7 @@ namespace Harmony.Services
                 {
                     return new ReturnResponse<UserProfileViewModel>
                     {
+                        StatusCode = response.StatusCode,
                         Errors = response.Errors,
                         Message = response.Message,
                     };
@@ -108,6 +109,7 @@ namespace Harmony.Services
             {
                 return new ReturnResponse<UserProfileViewModel>
                 {
+                    StatusCode = HttpStatusCode._500,
                     Errors = new List<string> { ex.Message },
                     Message = "An error occurred while updating the user bio."
                 };
@@ -123,6 +125,7 @@ namespace Harmony.Services
                 {
                     return new ReturnResponse<UserProfileViewModel>
                     {
+                        StatusCode = response.StatusCode,
                         Errors = response.Errors,
                         Message = response.Message,
                     };
@@ -137,6 +140,7 @@ namespace Harmony.Services
             {
                 return new ReturnResponse<UserProfileViewModel>
                 {
+                    StatusCode = HttpStatusCode._500,
                     Errors = new List<string> { ex.Message },
                     Message = "An error occurred while fetching the user profile."
                 };

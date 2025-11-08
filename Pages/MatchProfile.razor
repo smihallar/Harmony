@@ -1,5 +1,13 @@
-﻿<h3>MatchProfile</h3>
-
+﻿@using Harmony.Components;
+<h3>MatchProfile</h3>
+@if(isConnectedToSpotify)
+{
+}
+else
+{
+    <ConnectToSpotify></ConnectToSpotify>
+}
+)
 @code {
 
 }

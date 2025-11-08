@@ -1,0 +1,36 @@
+﻿@using Harmony.Viewmodels
+<EditForm Model="RegisterModel" OnValidSubmit="HandleRegister">
+    <DataAnnotationsValidator />
+    <div class="mb-3">
+        <label for="register-email">E-post</label>
+        <InputText id="register-email" class="form-control" @bind-Value="RegisterModel.Email" required />
+        <ValidationMessage For="@(() => RegisterModel.Email)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="register-password">Lösenord</label>
+        <InputText id="register-password" type="password" class="form-control" @bind-Value="RegisterModel.Password" required />
+        <ValidationMessage For="@(() => RegisterModel.Password)" />
+    </div>
+
+    <div class="d-grid">
+        <button type="submit" class="btn btn-primary btn-lg">Register</button>
+    </div>
+    <br />
+    @if (!string.IsNullOrEmpty(errorMessage) || errors.Any())
+    {
+        <div class="alert alert-danger" role="alert">
+            @errorMessage
+            @foreach(var error in errors)
+            {
+                <div>- @error</div>
+            }
+        </div>
+    }
+    @if(!string.IsNullOrEmpty(successMessage))
+    {
+        <div class="alert alert-success" role="alert">
+            @successMessage
+        </div>
+    }
+</EditForm>

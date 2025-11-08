@@ -1,11 +1,17 @@
-html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-}
-
 h1:focus {
     outline: none;
 }
-
+.btn-spotify
+{
+    color: #fff;
+    background-color: #1ed760;
+    border-color: #1ed760;
+}
+.btn-spotify:hover {
+    color: #fff;
+    background-color: #1aa34a;
+    border-color: #178c3c;
+}
 a, .btn-link {
     color: #0071c1;
 }

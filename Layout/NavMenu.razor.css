@@ -11,6 +11,13 @@
     font-size: 1.1rem;
 }
 
+.logo {
+    display: block;
+    max-width: 234px;
+    height: 40px;
+    margin-bottom: 1rem;
+}
+
 .bi {
     display: inline-block;
     position: relative;
@@ -19,6 +26,17 @@
     margin-right: 0.75rem;
     top: -1px;
     background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.nav-icon {
+    width: 1.5rem;
+    height: auto;
+    display: inline-block;
+    position: relative;
+    margin-right: 0.75rem;
+    font-size:1.25rem;
 }
 
 .bi-house-door-fill-nav-menu {

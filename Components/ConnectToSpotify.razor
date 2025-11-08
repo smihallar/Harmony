@@ -1,0 +1,19 @@
+﻿<p>To see your music and match with other users, click below to connect to Spotify</p>
+<button class="btn btn-spotify" @onclick="ConnectUserToSpotify">
+    <i class="fa-brands fa-spotify" style="margin-right: 4px;"></i>Connect to Spotify
+</button>
+@if(!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger">@errorMessage</div>
+}
+@if(Errors != null && Errors.Count > 0)
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach(var err in Errors)
+            {
+                <li>@err</li>
+            }
+        </ul>
+    </div>
+}

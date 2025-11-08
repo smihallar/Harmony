@@ -31,6 +31,8 @@ namespace Harmony
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IClient, Client>();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IMatchService, MatchService>();
+            builder.Services.AddScoped<ISpotifyService, SpotifyService>();
 
             await builder.Build().RunAsync();
         }

@@ -2,5 +2,6 @@
 {
     public partial class MyMatches
     {
+        private bool isConnectedToSpotify = false;
     }
 }

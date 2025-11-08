@@ -1,5 +1,23 @@
-﻿<h3>MyMatches</h3>
-
+﻿@using Harmony.Components;
+@using Microsoft.AspNetCore.Components.Authorization
+@page "/matches/{userId}"
+<AuthorizeView>
+    <Authorized>
+        @if(isConnectedToSpotify)
+        {
+            <MatchList></MatchList>
+        }
+        else
+        {
+            <ConnectToSpotify></ConnectToSpotify>
+        }
+    </Authorized>
+    <NotAuthorized>
+        <div>
+            <NotAuthorizedLogin></NotAuthorizedLogin>
+        </div>
+    </NotAuthorized>
+    </AuthorizeView>
 @code {
 
 }

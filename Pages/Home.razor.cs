@@ -2,5 +2,6 @@
 {
     public partial class Home
     {
+        private bool isConnectedToSpotify = false;
     }
 }

@@ -1,6 +1,67 @@
-﻿@page "/profile/{userId}"
-<h3>UserProfile</h3>
+﻿@using Harmony.Components
+@using Microsoft.AspNetCore.Components.Authorization
+@page "/user-profile/{userId}"
 
-@code {
+<AuthorizeView>
+    <Authorized>
+        @if (userProfileModel == null)
+        {
+            <p>Loading profile...</p>
+        }
+        else
+        {
+            <div class="container mt-4">
+                <h2>@userProfileModel.UserName's Profile</h2>
 
+                <div class="profile-info mt-3">
+                    <img src="@userProfileModel.ProfilePictureUrl"
+                         alt="Profile Picture"
+                         class="profile-pic mb-3" />
+
+                    <p><strong>Email:</strong> @userProfileModel.Email</p>
+                    <p><strong>Country:</strong> @userProfileModel.CountryCode</p>
+                    <p><strong>Joined:</strong> @userProfileModel.CreatedAt.ToLocalTime()</p>
+
+                    <h5 class="mt-4">Biography</h5>
+
+                    @if (isAuthorizedToEdit)
+                    {
+                        <textarea class="form-control" rows="4" @bind="userProfileModel.Biography"></textarea>
+                        <button class="btn btn-primary mt-2" @onclick="SaveBioAsync">Save</button>
+                    }
+                    else
+                    {
+                        <p><strong>Email:</strong> @userProfileModel.Biography</p>
+                    }
+                    <div>
+                        <h5 class="mt-4">Music taste</h5>
+                        <p><strong>Songs</strong></p>
+                        @foreach(var song in userProfileModel.FavoriteSongs)
+                        {
+@*                             <div>@song.AlbumImageUrl</div> *@
+                            <div>@song.Title by @string.Join(", ", song.Artists.Select(a => a.Name))</div>
+                            <div>Popularity score: @song.Popularity</div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </Authorized>
+
+    <NotAuthorized>
+        <div class="text-center mt-4">
+            <NotAuthorizedLogin />
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
+
+@if (!string.IsNullOrEmpty(profileMessage))
+{
+    <div class="alert alert-danger" role="alert">
+        @profileMessage
+        @foreach (var error in errors)
+        {
+            <div>- @error</div>
+        }
+    </div>
 }
