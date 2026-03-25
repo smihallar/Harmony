@@ -53,3 +53,10 @@ Harmony is a social music discovery platform that connects people through their 
 4. Open browser at displayed URL
 5. Enjoy!
 
+## Some images of the frontend:
+User profile with top tracks, artists and genres
+<img width="2003" height="1052" alt="image" src="https://github.com/user-attachments/assets/fea98abf-302f-40d1-9db3-f838a16b4f77" />
+<img width="1992" height="1174" alt="image" src="https://github.com/user-attachments/assets/a49aba70-a608-475a-9176-aa3c5c27c29c" />
+
+Matches (with synthetic users in this case)
+<img width="2090" height="1078" alt="image" src="https://github.com/user-attachments/assets/97b494c0-4c4d-4dc6-8cdf-e07a9cde8a09" />
