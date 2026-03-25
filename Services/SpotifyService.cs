@@ -49,12 +49,12 @@ namespace Harmony.Services
             }
         }
 
-        public async Task<ReturnResponse<UserProfileViewModel>> RefreshSpotifyTopItemsForUser()
+        public async Task<ReturnResponse<UserProfileViewModel>> RefreshSpotifyTopItemsForUser(string userId)
         {
             try
             {
                 await GetBearerToken();
-                var response = await client.RefreshTopItemsAsync();
+                var response = await client.RefreshTopItemsAsync(userId);
                 if (response.Errors != null && response.Errors.Any())
                 {
                     return new ReturnResponse<UserProfileViewModel>
@@ -79,12 +79,12 @@ namespace Harmony.Services
             }
         }
 
-        public async Task<ReturnResponse<UserProfileViewModel>> RefreshUserProfileWithSpotifyDetails()
+        public async Task<ReturnResponse<UserProfileViewModel>> RefreshUserProfileWithSpotifyDetails(string userId)
         {
             try
             {
                 await GetBearerToken();
-                var response = await client.RefreshProfileAsync();
+                var response = await client.RefreshProfileAsync(userId);
                 if (response.Errors != null && response.Errors.Any())
                 {
                     return new ReturnResponse<UserProfileViewModel>

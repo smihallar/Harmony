@@ -32,7 +32,7 @@ namespace Harmony.Providers
             var tokenContent = jwtSecurityTokenHandler.ReadJwtToken(savedToken);
 
             // If token expired, return that user object with not logged in principal
-            if (tokenContent.ValidTo < DateTime.Now)
+            if (tokenContent.ValidTo < DateTime.UtcNow)
             {
                 return new AuthenticationState(user);
             }
@@ -44,7 +44,6 @@ namespace Harmony.Providers
             return new AuthenticationState(user);
         }
 
-        // Method to call when logged in
         public async Task LoggedIn()
         {
             var claims = await GetClaims();
@@ -53,7 +52,6 @@ namespace Harmony.Providers
             NotifyAuthenticationStateChanged(authState);
         }
 
-        // method to call when logged out
         public async Task LoggedOut()
         {
             await localStorage.RemoveItemAsync("accessToken");

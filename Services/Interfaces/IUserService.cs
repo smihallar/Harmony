@@ -8,7 +8,7 @@ namespace Harmony.Services.Interfaces
     {
         Task<ReturnResponse<UserViewModel>> GetUserByIdAsync(string userId);
         Task<ReturnResponse> DeleteUserAsync(string userId);
-        Task<ReturnResponse<UserProfileViewModel>> UpdateUserBioAsync(string userId, string newBio);
+        Task<ReturnResponse<string>> UpdateUserBioAsync(string userId, string newBio);
         Task<ReturnResponse<UserProfileViewModel>> GetUserProfileAsync(string userId);
     }
 }

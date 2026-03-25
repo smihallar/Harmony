@@ -1,0 +1,47 @@
+﻿<div class="match-card" @onclick="NavigateToMatchProfile">
+    <div class="match-card-content">
+        <img src="@DisplayProfile?.ProfilePictureUrl" class="profile-pic-match" />
+
+        <div class="match-details">
+            <div class="user-info">
+                <span class="user-name">@(!string.IsNullOrEmpty(DisplayProfile?.SpotifyUserId) ? DisplayProfile?.SpotifyUserId : "Fake")</span>
+                <span class="compatibility">
+                    <i class="fa-solid fa-star"></i> @MatchViewModel.CompatibilityScore
+                </span>
+            </div>
+
+            <div class="genres-list-match">
+                @if (DisplayGenres != null)
+                {
+                    @foreach (var genre in DisplayGenres)
+                    {
+                        <span class="badge genre-badge-match">@genre.Name</span>
+                    }
+                }
+            </div>
+
+            <div class="music-row">
+                @if (DisplayArtists != null)
+                {
+                    @foreach (var artist in DisplayArtists)
+                    {
+                        <img src="@artist.ArtistImageUrl" class="artist-photo" />
+                    }
+                }
+                @if (DisplaySongs != null)
+                {
+                    @foreach (var song in DisplaySongs)
+                    {
+                        <img src="@song.AlbumImageUrl" class="album-cover" />
+                    }
+                }
+            </div>
+        </div>
+
+        <small class="click-hint">Click to see more...</small>
+
+@*         <button class="delete-btn" @onclick="DeleteMatch">
+            <i class="fa-solid fa-xmark"></i>
+        </button> *@
+    </div>
+</div>

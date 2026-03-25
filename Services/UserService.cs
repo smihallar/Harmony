@@ -75,13 +75,13 @@ namespace Harmony.Services
             }
         }
 
-        public async Task<ReturnResponse<UserProfileViewModel>> UpdateUserBioAsync(string userId, string newBio)
+        public async Task<ReturnResponse<string>> UpdateUserBioAsync(string userId, string newBio)
         {
             try
             {
                 if (string.IsNullOrEmpty(newBio)|| newBio.Length > 500)
                 {
-                    return new ReturnResponse<UserProfileViewModel>
+                    return new ReturnResponse<string>
                     {
                         Errors = new List<string> { "Bio must be between 0 and 500 characters." },
                         Message = "Invalid biography length."
@@ -92,7 +92,7 @@ namespace Harmony.Services
                 var response = await client.UpdateBioAsync(userId, updateRequest);
                 if (response.Errors != null && response.Errors.Any())
                 {
-                    return new ReturnResponse<UserProfileViewModel>
+                    return new ReturnResponse<string>
                     {
                         StatusCode = response.StatusCode,
                         Errors = response.Errors,
@@ -100,14 +100,14 @@ namespace Harmony.Services
                     };
                 }
                 var userProfileViewModel = mapper.Map<UserProfileViewModel>(response.Data);
-                return new ReturnResponse<UserProfileViewModel>
+                return new ReturnResponse<string>
                 {
-                    Data = userProfileViewModel
+                    Data = userProfileViewModel.Biography
                 };
             }
             catch (Exception ex)
             {
-                return new ReturnResponse<UserProfileViewModel>
+                return new ReturnResponse<string>
                 {
                     StatusCode = HttpStatusCode._500,
                     Errors = new List<string> { ex.Message },

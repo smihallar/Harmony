@@ -1,8 +1,11 @@
 ﻿@inject NavigationManager NavigationManager
 
 <div>
-    <p>You must be logged in to access this page.</p>
+    <p>You must be logged in to access this page. If you do not have an account, please register.</p>
+    <div style="align-items: center">
     <button class="btn btn-primary" @onclick='() => NavigationManager.NavigateTo("/login")'>Log In</button>
+    <button class="btn btn-secondary" @onclick='() => NavigationManager.NavigateTo("/register")'>Register</button>
+    </div>
 </div>
 
 @code {

@@ -22,6 +22,7 @@
 
 namespace Harmony.Services.Base
 {
+    using System.ComponentModel.DataAnnotations;
     using static Harmony.Services.Base.Client;
     using System = global::System;
 
@@ -102,21 +103,21 @@ namespace Harmony.Services.Base
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<UserProfileResponseReturnResponse> RefreshTopItemsAsync();
+        System.Threading.Tasks.Task<UserProfileResponseReturnResponse> RefreshTopItemsAsync(string userId);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<UserProfileResponseReturnResponse> RefreshTopItemsAsync(System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<UserProfileResponseReturnResponse> RefreshTopItemsAsync(System.Threading.CancellationToken cancellationToken, string userId);
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<UserProfileResponseReturnResponse> RefreshProfileAsync();
+        System.Threading.Tasks.Task<UserProfileResponseReturnResponse> RefreshProfileAsync(string userId);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<UserProfileResponseReturnResponse> RefreshProfileAsync(System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<UserProfileResponseReturnResponse> RefreshProfileAsync(System.Threading.CancellationToken cancellationToken, string userId);
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -788,15 +789,15 @@ namespace Harmony.Services.Base
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<UserProfileResponseReturnResponse> RefreshTopItemsAsync()
+        public virtual System.Threading.Tasks.Task<UserProfileResponseReturnResponse> RefreshTopItemsAsync(string userId)
         {
-            return RefreshTopItemsAsync(System.Threading.CancellationToken.None);
+            return RefreshTopItemsAsync(System.Threading.CancellationToken.None, userId);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<UserProfileResponseReturnResponse> RefreshTopItemsAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<UserProfileResponseReturnResponse> RefreshTopItemsAsync(System.Threading.CancellationToken cancellationToken, string userId)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -810,8 +811,9 @@ namespace Harmony.Services.Base
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
-                    // Operation Path: "api/Spotify/refresh-top-items"
+                    // Operation Path: "api/Spotify/refresh-top-items/{userId}"
                     urlBuilder_.Append("api/Spotify/refresh-top-items");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture)));
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -855,15 +857,15 @@ namespace Harmony.Services.Base
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<UserProfileResponseReturnResponse> RefreshProfileAsync()
+        public virtual System.Threading.Tasks.Task<UserProfileResponseReturnResponse> RefreshProfileAsync(string userId)
         {
-            return RefreshProfileAsync(System.Threading.CancellationToken.None);
+            return RefreshProfileAsync(System.Threading.CancellationToken.None, userId);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<UserProfileResponseReturnResponse> RefreshProfileAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<UserProfileResponseReturnResponse> RefreshProfileAsync(System.Threading.CancellationToken cancellationToken, string userId)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -877,8 +879,9 @@ namespace Harmony.Services.Base
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
-                    // Operation Path: "api/Spotify/refresh-profile"
+                    // Operation Path: "api/Spotify/refresh-profile/{userId}"
                     urlBuilder_.Append("api/Spotify/refresh-profile");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture)));
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -1547,21 +1550,19 @@ namespace Harmony.Services.Base
 
         [Newtonsoft.Json.JsonProperty("recipientUserId", Required = Newtonsoft.Json.Required.AllowNull)]
         public string RecipientUserId { get; set; }
-
+     
         [Newtonsoft.Json.JsonProperty("compatibilityScore", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int CompatibilityScore { get; set; }
 
         [Newtonsoft.Json.JsonProperty("createdAt", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.DateTime CreatedAt { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("mutualSongIds", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<string> MutualSongIds { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("mutualArtistIds", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<string> MutualArtistIds { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("mutualGenreIds", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<string> MutualGenreIds { get; set; }
+        [Newtonsoft.Json.JsonProperty("mutualSongs", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<Song> MutualSongs { get; set; }
+        [Newtonsoft.Json.JsonProperty("mutualArtists", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<Artist> MutualArtists { get; set; }
+        [Newtonsoft.Json.JsonProperty("mutualGenres", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<Genre> MutualGenres { get; set; }
 
     }
 

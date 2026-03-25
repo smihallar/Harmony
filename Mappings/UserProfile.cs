@@ -28,6 +28,7 @@ namespace Harmony.Mappings
 
             CreateMap<UserProfileViewModel, UpdateUserBioRequest>()
                 .ForMember(dest => dest.Bio, opt => opt.MapFrom(src => src.Biography));
+            CreateMap<UserResponse, UserViewModel>();
 
         }
     }

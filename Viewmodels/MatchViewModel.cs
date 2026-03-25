@@ -11,5 +11,8 @@
         public List<string> MutualSongIds { get; set; } = new List<string>();
         public List<string> MutualArtistIds { get; set; } = new List<string>();
         public List<string> MutualGenreIds { get; set; } = new List<string>();
+        public List<SongViewModel> MutualSongs { get; set; } = new List<SongViewModel>();
+        public List<ArtistViewModel> MutualArtists { get; set; } = new List<ArtistViewModel>();
+        public List<GenreViewModel> MutualGenres { get; set; } = new List<GenreViewModel>();
     }
 }

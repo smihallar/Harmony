@@ -1,19 +1,25 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
 @using Harmony.Components
 @page "/"
-
-<AuthorizeView>
-    <Authorized>
-        @if(isConnectedToSpotify)
-        {
-            <MatchList></MatchList>
-        }
-        else
-        {
-            <ConnectToSpotify></ConnectToSpotify>
-        }
-    </Authorized>
+@if (isLoading)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <AuthorizeView>
+        <Authorized>
+            <h1>Welcome to Harmony!</h1>
+            @if (isConnectedToSpotify)
+            {
+            }
+            else
+            {
+                <ConnectToSpotify></ConnectToSpotify>
+            }
+        </Authorized>
     <NotAuthorized>
         <NotAuthorizedLogin></NotAuthorizedLogin>
     </NotAuthorized>
 </AuthorizeView>
+}
