@@ -1,0 +1,61 @@
+﻿@using Harmony.Components;
+@using Microsoft.AspNetCore.Components.Authorization
+@page "/matches/{userId}"
+
+@if (isLoading)
+{
+    <p>Loading matches...</p>
+}
+else {
+<AuthorizeView>
+    <Authorized>
+
+        @if(isConnectedToSpotify)
+        {
+            <FindMatches OnMatchesRefreshed="OnMatchesRefreshed"></FindMatches>
+            <hr />
+            @if(matchViewModels == null || matchViewModels.Count == 0)
+            {
+                <h3>You have no matches :( </h3>
+                <p>Try refreshing your matches or listening to some new music to better your chances at finding one!</p>
+            }
+            else
+            {
+                @foreach(var matchViewModel in matchViewModels.OrderByDescending(m => m.CompatibilityScore))
+                {
+                    <MatchCard MatchViewModel="matchViewModel"></MatchCard>
+                    <hr />
+                }
+            }
+        }
+        else
+        {
+            <ConnectToSpotify></ConnectToSpotify>
+        }
+    </Authorized>
+    <NotAuthorized>
+        <div>
+            <NotAuthorizedLogin></NotAuthorizedLogin>
+        </div>
+    </NotAuthorized>
+    </AuthorizeView>
+
+@* @if (!string.IsNullOrEmpty(matchMessage))
+{
+    <div class="alert alert-info">
+        @matchMessage
+    </div>
+}
+@if(errors != null && errors.Count > 0)
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach(var err in errors)
+            {
+                <li>@err</li>
+            }
+        </ul>
+    </div>
+
+} *@
+}

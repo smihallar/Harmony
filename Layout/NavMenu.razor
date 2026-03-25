@@ -1,6 +1,7 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">Harmony</a>
+﻿@using Microsoft.AspNetCore.Components.Authorization
+<div class="top-row ps-3 navbar navbar-dark align-items-start">
+    <div class="container-fluid flex-column align-items-start">
+        <img src="logoHarmony.png" alt="Harmony Logo" class="logo mb-2" />
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -11,19 +12,30 @@
     <nav class="flex-column">
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+                <span class="fa-solid fa-house nav-icon" aria-hidden="true"></span> Home
             </NavLink>
+            <AuthorizeView>
+                <Authorized>
+                    <NavLink class="nav-link" @onclick="NavigateToUserProfile" Match="NavLinkMatch.All">
+                        <span class="fa-solid fa-circle-user nav-icon" aria-hidden="true"></span> My profile
+                    </NavLink>
+                    <NavLink class="nav-link" @onclick="NavigateToMatches" Match="NavLinkMatch.All">
+                        <span class="fa-solid fa-users nav-icon" aria-hidden="true"></span> Matches
+                    </NavLink>
+                    <NavLink class="nav-link" @onclick="Logout" Match="NavLinkMatch.All">
+                       Log out
+                    </NavLink>
+                </Authorized>
+                <NotAuthorized>
+                    <NavLink class="nav-link" href="Login" Match="NavLinkMatch.All">
+                      Log in
+                    </NavLink>
+                    <NavLink class="nav-link" href="Register">
+                       Register
+                    </NavLink>
+                </NotAuthorized>
+            </AuthorizeView>
         </div>
     </nav>
 </div>
 
-@code {
-    private bool collapseNavMenu = true;
-
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
-}

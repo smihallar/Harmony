@@ -1,0 +1,245 @@
+﻿@using Harmony.Components
+@using Microsoft.AspNetCore.Components.Authorization
+@page "/user-profile/{userId}"
+
+<AuthorizeView>
+    <Authorized>
+        @if (userProfileModel == null || isLoading)
+        {
+            <p>Loading profile...</p>
+        }
+        else
+        {
+            <div class="container mt-4">
+                @if (userProfileModel.IsConnectedToSpotify)
+                {
+                    <div class="profile-info mt-3">
+                        <!-- Modern Profile Card -->
+                        <div class="profile-card p-4 mb-4">
+                            <div class="d-flex align-items-center gap-4 flex-wrap">
+                                <!-- Profile Picture -->
+                                <img src="@userProfileModel.ProfilePictureUrl" alt="Profile Picture" class="profile-pic-large" />
+
+                                <!-- User Info -->
+                                <div class="user-info-modern flex-grow-1">
+                                    <h2 class="user-name">
+                                        @(!string.IsNullOrEmpty(userProfileModel.SpotifyUserId) ? userProfileModel.SpotifyUserId : userProfileModel.UserName)
+                                    </h2>
+
+                                    <div class="d-flex flex-wrap align-items-center gap-3 mt-2">
+                                        <p class="m-0"><strong>Email:</strong> @userProfileModel.Email</p>
+                                        <p class="m-0 d-flex align-items-center gap-1">
+                                            <strong>Country:</strong>
+                                            <img src="/Flags/SE.png" alt="Country Flag" class="country-flag-small" />
+                                        </p>
+                                        <p class="m-0"><strong>Joined:</strong> @userProfileModel.CreatedAt.ToLocalTime().ToShortDateString()</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Biography -->
+                            <div class="bio-section mt-4 p-3 rounded shadow-sm">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h5 class="m-0">Biography</h5>
+                                    @if (isAuthorizedToEdit)
+                                    {
+                                        <button class="btn btn-sm btn-outline-primary" @onclick="() => isEditingBio = !isEditingBio">
+                                            @(isEditingBio ? "Cancel" : "Edit")
+                                        </button>
+                                    }
+                                </div>
+
+                                @if (isEditingBio && isAuthorizedToEdit)
+                                {
+                                    <textarea class="form-control mb-2" rows="4" @bind="userProfileModel.Biography"></textarea>
+                                    <button class="btn btn-primary btn-sm" @onclick="SaveBioAsync">Save</button>
+                                }
+                                else
+                                {
+                                    <p class="m-0">@userProfileModel.Biography</p>
+                                }
+                            </div>
+                        </div>
+                        <div class="music-profile p-4">
+
+                            <!-- Songs Carousel -->
+                            <div class="carousel-header d-flex align-items-center gap-2 mb-3">
+                                <h4 class="m-0">Top Tracks</h4>
+                            </div>
+                            <div id="songsCarousel" class="carousel slide" data-bs-ride="carousel">
+                                <div class="carousel-inner">
+                                    @for (int i = 0; i < userProfileModel.FavoriteSongs.Count; i += 4)
+                                    {
+                                        var chunk = userProfileModel.FavoriteSongs.Skip(i).Take(4).ToList();
+                                        <div class="carousel-item @(i == 0 ? "active" : "")">
+                                            <div class="d-flex justify-content-center gap-4 flex-wrap">
+                                                @foreach (var song in chunk)
+                                                {
+                                                    <div class="song-card text-center">
+                                                        <img src="@(string.IsNullOrWhiteSpace(song.AlbumImageUrl) ? "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg" : song.AlbumImageUrl)" class="album-cover mb-2" />
+                                                        <div class="fw-bold song-title text-truncate">@song.Title</div>
+                                                        <div class="text-muted small artist-names text-truncate">
+                                                            @string.Join(", ", song.Artists.Select(a => a.Name))
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+
+                                <button class="carousel-control-prev" type="button" data-bs-target="#songsCarousel" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#songsCarousel" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                            </div>
+                            <div class="harmony-divider">
+                                <svg viewBox="0 0 1200 20" preserveAspectRatio="none">
+                                    <path d="M0,10 L50,0 L100,20 L150,0 L200,20 L250,0 L300,20 L350,0 L400,20 L450,0 L500,20 L550,0 L600,20 L650,0 L700,20 L750,0 L800,20 L850,0 L900,20 L950,0 L1000,20 L1050,0 L1100,20 L1150,0 L1200,10"
+                                          stroke="#fac9f4" fill="transparent" stroke-width="2" />
+                                </svg>
+                            </div>
+
+                            <div class="carousel-header d-flex align-items-center gap-2 mb-3 mt-4">
+                                <h4 class="m-0">Top Artists</h4>
+                            </div>
+                            <div id="artistsCarousel" class="carousel slide" data-bs-ride="carousel">
+                                <div class="carousel-inner">
+                                    @for (int i = 0; i < userProfileModel.FavoriteArtists.Count; i += 4)
+                                    {
+                                        var chunk = userProfileModel.FavoriteArtists.Skip(i).Take(4).ToList();
+                                        <div class="carousel-item @(i == 0 ? "active" : "")">
+                                            <div class="d-flex justify-content-center gap-4 flex-wrap">
+                                                @foreach (var artist in chunk)
+                                                {
+                                                    <div class="artist-card text-center">
+                                                        <img src="@(string.IsNullOrWhiteSpace(artist.ArtistImageUrl) ? "https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg" : artist.ArtistImageUrl)" class="artist-photo mb-2" />
+                                                        <div class="fw-bold artist-name text-truncate">
+                                                            @artist.Name
+                                                        </div>
+                                                        @if (artist.Genres?.Count > 0)
+                                                        {
+                                                            <div class="text-muted small genres">
+                                                                <i class="bi bi-tags me-1"></i>
+                                                                @string.Join(", ", artist.Genres.Select(g => g.Name))
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+
+                                <button class="carousel-control-prev" type="button" data-bs-target="#artistsCarousel" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#artistsCarousel" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                            </div>
+
+                            <!-- Genres -->
+                            <div class="carousel-header d-flex align-items-center gap-2 mb-3 mt-4">
+                                <h4 class="m-0">Favorite Genres</h4>
+                            </div>
+                            <div class="genres-list d-flex flex-wrap gap-2">
+                                @foreach (var genre in userProfileModel.FavoriteGenres)
+                                {
+                                    <span class="badge">
+                                        <i class="bi bi-music-note me-1"></i>@genre.Name
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                        <hr />
+                        @if (isAuthorizedToEdit)
+                        {
+                            <button class="btn btn-danger" @onclick="DeleteUser">Delete account</button>
+                        }
+                        <hr />
+                    </div>
+                }
+                else
+                {
+                    <div class="profile-info mt-3">
+                        <!-- Modern Profile Card -->
+                        <div class="profile-card p-4 mb-4">
+                            <div class="d-flex align-items-center gap-4 flex-wrap">
+                                <!-- Profile Picture -->
+                                <img src="@userProfileModel.ProfilePictureUrl" alt="Profile Picture" class="profile-pic-large" />
+                                <!-- User Info -->
+                                <div class="user-info-modern flex-grow-1">
+                                    <h2 class="user-name">
+                                        @(!string.IsNullOrEmpty(userProfileModel.SpotifyUserId) ? userProfileModel.SpotifyUserId : userProfileModel.UserName)
+                                    </h2>
+
+                                    <div class="d-flex flex-wrap align-items-center gap-3 mt-2">
+                                        <p class="m-0"><strong>Email:</strong> @userProfileModel.Email</p>
+                                        <p class="m-0"><strong>Joined:</strong> @userProfileModel.CreatedAt.ToLocalTime().ToShortDateString()</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Biography -->
+                            <div class="bio-section mt-4 p-3 rounded shadow-sm">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h5 class="m-0">Biography</h5>
+                                    @if (isAuthorizedToEdit)
+                                    {
+                                        <button class="btn btn-sm btn-outline-primary" @onclick="() => isEditingBio = !isEditingBio">
+                                            @(isEditingBio ? "Cancel" : "Edit")
+                                        </button>
+                                    }
+                                </div>
+
+                                @if (isEditingBio && isAuthorizedToEdit)
+                                {
+                                    <textarea class="form-control mb-2" rows="4" @bind="userProfileModel.Biography"></textarea>
+                                    <button class="btn btn-primary btn-sm" @onclick="SaveBioAsync">Save</button>
+                                }
+                                else
+                                {
+                                    <p class="m-0">@userProfileModel.Biography</p>
+                                }
+                            </div>
+                        </div>
+                        </div>
+                        <hr />
+                        <ConnectToSpotify></ConnectToSpotify>
+                        <hr />
+                        @if (isAuthorizedToEdit)
+                        {
+                            <button class="btn btn-danger" @onclick="DeleteUser">Delete account</button>
+                        }
+                    <hr />
+                    
+                    
+                }
+            </div>
+        }
+    </Authorized>
+
+    <NotAuthorized>
+        <div class="text-center mt-4">
+            <NotAuthorizedLogin />
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
+
+@if (!string.IsNullOrEmpty(profileMessage))
+{
+    <div class="alert alert-danger" role="alert">
+        @profileMessage
+        @foreach (var error in errors)
+        {
+            <div>- @error</div>
+        }
+    </div>
+}

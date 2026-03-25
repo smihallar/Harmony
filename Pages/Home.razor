@@ -1,7 +1,25 @@
-﻿@page "/"
-
-<PageTitle>Home</PageTitle>
-
-<h1>Hello, world!</h1>
-
-Welcome to your new app.
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@using Harmony.Components
+@page "/"
+@if (isLoading)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <AuthorizeView>
+        <Authorized>
+            <h1>Welcome to Harmony!</h1>
+            @if (isConnectedToSpotify)
+            {
+            }
+            else
+            {
+                <ConnectToSpotify></ConnectToSpotify>
+            }
+        </Authorized>
+    <NotAuthorized>
+        <NotAuthorizedLogin></NotAuthorizedLogin>
+    </NotAuthorized>
+</AuthorizeView>
+}
